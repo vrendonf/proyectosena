@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Trafico Inteligente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow bg-glow-a"></div>
+    <div class="bg-glow bg-glow-b"></div>
+
+    <main class="app-shell">
+        <header class="hero">
+            <div>
+                <p class="eyebrow">Smart City Control Center</p>
+                <h1>Sistema de Trafico Inteligente</h1>
+                <p class="subtitle">Monitoreo, analisis y respuesta operativa de movilidad urbana en tiempo real.</p>
+            </div>
+            <div class="hero-meta">
+                <p>Ultima actualizacion</p>
+                <strong id="last-update">--:--:--</strong>
+            </div>
+        </header>
+
+        <section class="kpi-grid">
+            <article class="kpi-card">
+                <p>Vehiculos en via</p>
+                <h2 id="vehicle-count">--</h2>
+                <span>flujo detectado por sensores</span>
+            </article>
+            <article class="kpi-card">
+                <p>Velocidad promedio</p>
+                <h2><span id="avg-speed">--</span> km/h</h2>
+                <span>corredores principales</span>
+            </article>
+            <article class="kpi-card">
+                <p>Ocupacion vial</p>
+                <h2><span id="road-occupancy">--</span>%</h2>
+                <span>capacidad usada</span>
+            </article>
+            <article class="kpi-card status-card">
+                <p>Estado semaforico</p>
+                <div id="traffic-light" class="signal-pill light-neutral">
+                    <span id="traffic-status-text">Cargando...</span>
+                </div>
+                <span id="signal-note">sin diagnostico disponible</span>
+            </article>
+        </section>
+
+        <section class="panel-grid">
+            <article class="panel chart-panel">
+                <div class="panel-head">
+                    <h3>Tendencia de demanda (ultimos 12 ciclos)</h3>
+                    <p>Permite visualizar crecimiento o alivio de congestion</p>
+                </div>
+                <canvas id="traffic-trend-chart"></canvas>
+            </article>
+
+            <article class="panel zone-panel">
+                <div class="panel-head">
+                    <h3>Zonas de la ciudad</h3>
+                    <p>Criticidad por zona (0 a 100)</p>
+                </div>
+                <div id="zone-list" class="zone-list"></div>
+            </article>
+
+            <article class="panel incident-panel">
+                <div class="panel-head">
+                    <h3>Incidentes recientes</h3>
+                    <p>Eventos operativos detectados</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Zona</th>
+                            <th>Severidad</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="incident-body"></tbody>
+                </table>
+            </article>
+
+            <article class="panel recommendation-panel">
+                <div class="panel-head">
+                    <h3>Analisis predictivo</h3>
+                    <p>Recomendacion automatica del sistema</p>
+                </div>
+                <p id="forecast-text" class="forecast-text">Esperando suficientes datos para estimar tendencia...</p>
+                <div class="chips">
+                    <span class="chip" id="chip-level">Nivel: --</span>
+                    <span class="chip" id="chip-projection">Proyeccion: --</span>
+                </div>
+            </article>
+        </section>
+
+        <footer class="app-footer">
+            <p>Sistema academico de trafico inteligente para demostracion de Smart Cities.</p>
+        </footer>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
