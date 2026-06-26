@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="bg-glow bg-glow-a"></div>
@@ -49,6 +49,36 @@
                     <span id="traffic-status-text">Cargando...</span>
                 </div>
                 <span id="signal-note">sin diagnostico disponible</span>
+            </article>
+        </section>
+
+        <section class="control-grid">
+            <article class="panel quick-actions">
+                <div class="panel-head">
+                    <h3>Modo de simulacion</h3>
+                    <p>Cambia el comportamiento para demostracion en vivo</p>
+                </div>
+                <div class="action-row">
+                    <button class="action-btn" data-scenario="normal">Normal</button>
+                    <button class="action-btn" data-scenario="peak">Hora pico</button>
+                    <button class="action-btn" data-scenario="rain">Lluvia</button>
+                    <button class="action-btn" data-scenario="incident">Accidente</button>
+                </div>
+            </article>
+
+            <article class="panel system-status">
+                <div class="panel-head">
+                    <h3>Estado del sistema</h3>
+                    <p>Salud de sensores y conectividad</p>
+                </div>
+                <div class="status-row">
+                    <span id="api-dot" class="dot dot-online"></span>
+                    <span id="api-text">Conectado</span>
+                </div>
+                <div class="status-row">
+                    <strong id="sensor-health">98%</strong>
+                    <span>sensores operativos</span>
+                </div>
             </article>
         </section>
 
@@ -100,11 +130,34 @@
             </article>
         </section>
 
+        <section class="premium-grid">
+            <article class="panel city-map-panel">
+                <div class="panel-head">
+                    <h3>Mapa dinamico de congestion</h3>
+                    <p>Heat cells de movilidad urbana en tiempo real</p>
+                </div>
+                <div id="city-heatmap" class="city-heatmap" aria-label="Mapa de calor de trafico"></div>
+            </article>
+
+            <article class="panel alert-feed-panel">
+                <div class="panel-head">
+                    <h3>Centro de alertas</h3>
+                    <p>Eventos cinematograficos para presentacion ejecutiva</p>
+                </div>
+                <div id="alert-feed" class="alert-feed">
+                    <article class="alert-card level-low">
+                        <h4>Sistema inicializado</h4>
+                        <p>Motor de analitica en espera de eventos de trafico.</p>
+                    </article>
+                </div>
+            </article>
+        </section>
+
         <footer class="app-footer">
             <p>Sistema academico de trafico inteligente para demostracion de Smart Cities.</p>
         </footer>
     </main>
 
-    <script src="app.js"></script>
+    <script src="/app.js"></script>
 </body>
 </html>
