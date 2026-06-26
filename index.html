@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -135,10 +137,10 @@
         <section class="premium-grid">
             <article class="panel city-map-panel">
                 <div class="panel-head">
-                    <h3>Mapa dinamico de congestion</h3>
-                    <p>Heat cells de movilidad urbana en tiempo real</p>
+                    <h3>Mapa de congestion — Manizales</h3>
+                    <p>Zonas de movilidad urbana en tiempo real. Haz clic en cada zona para ver detalles.</p>
                 </div>
-                <div id="city-heatmap" class="city-heatmap" aria-label="Mapa de calor de trafico"></div>
+                <div id="manizales-map" class="manizales-map" aria-label="Mapa interactivo de trafico en Manizales"></div>
             </article>
 
             <article class="panel alert-feed-panel">

@@ -18,7 +18,7 @@ const apiDotEl = document.getElementById("api-dot");
 const apiTextEl = document.getElementById("api-text");
 const sensorHealthEl = document.getElementById("sensor-health");
 const scenarioButtons = Array.from(document.querySelectorAll(".action-btn"));
-const cityHeatmapEl = document.getElementById("city-heatmap");
+const cityHeatmapEl = document.getElementById("manizales-map");
 const alertFeedEl = document.getElementById("alert-feed");
 
 const trafficHistory = [];
@@ -30,7 +30,15 @@ const metricState = {
     ocupacionVial: 0,
     sensorHealth: 96
 };
-const heatCells = [];
+let manizalesMap = null;
+const zonaMarkers = {};
+
+const ZONAS_GEO = {
+    "Centro":     { lat: 5.0689,  lng: -75.5174, radio: 600 },
+    "Norte":      { lat: 5.0920,  lng: -75.5020, radio: 700 },
+    "Sur":        { lat: 5.0430,  lng: -75.5080, radio: 700 },
+    "Occidente":  { lat: 5.0680,  lng: -75.5420, radio: 650 }
+};
 
 const chartCanvasEl = document.getElementById("traffic-trend-chart");
 const trendChart = window.Chart
@@ -112,47 +120,63 @@ function animateNumber(key, nextValue, renderFn, duration = 550) {
     requestAnimationFrame(frame);
 }
 
-function ensureHeatmapGrid() {
-    if (!cityHeatmapEl || heatCells.length > 0) {
-        return;
-    }
-
-    const totalCells = 70;
-    for (let i = 0; i < totalCells; i += 1) {
-        const cell = document.createElement("div");
-        cell.className = "heat-cell";
-        cityHeatmapEl.appendChild(cell);
-        heatCells.push(cell);
-    }
-}
-
 function intensityToColor(level) {
-    if (level >= 80) {
-        return "#dd3f52";
-    }
-    if (level >= 55) {
-        return "#ee9b00";
-    }
+    if (level >= 80) return "#dd3f52";
+    if (level >= 55) return "#ee9b00";
     return "#1ca181";
 }
 
-function updateHeatmap(data) {
-    ensureHeatmapGrid();
+function intensityToLabel(level) {
+    if (level >= 80) return "Alta congestion";
+    if (level >= 55) return "Congestion moderada";
+    return "Flujo normal";
+}
 
-    const zoneAverage = Math.round(data.zonas.reduce((acc, z) => acc + z.nivel, 0) / data.zonas.length);
-    const base = Math.round((zoneAverage + data.ocupacionVial) / 2);
+function initManizalesMap() {
+    if (manizalesMap || !cityHeatmapEl) return;
 
-    heatCells.forEach((cell, idx) => {
-        const wave = Math.sin((Date.now() / 450 + idx) * 0.35) * 8;
-        const jitter = Math.floor(Math.random() * 18) - 9;
-        const intensity = Math.max(8, Math.min(100, base + wave + jitter));
+    manizalesMap = L.map("manizales-map", {
+        center: [5.0689, -75.5174],
+        zoom: 13,
+        zoomControl: true,
+        scrollWheelZoom: false
+    });
 
-        cell.style.backgroundColor = intensityToColor(intensity);
-        if (intensity > 65) {
-            cell.classList.add("active");
-        } else {
-            cell.classList.remove("active");
-        }
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18
+    }).addTo(manizalesMap);
+
+    Object.entries(ZONAS_GEO).forEach(([nombre, geo]) => {
+        const circle = L.circle([geo.lat, geo.lng], {
+            radius: geo.radio,
+            color: "#1ca181",
+            fillColor: "#1ca181",
+            fillOpacity: 0.35,
+            weight: 2
+        }).addTo(manizalesMap);
+
+        circle.bindPopup(`<h4>${nombre}</h4><p>Cargando datos...</p>`);
+        zonaMarkers[nombre] = circle;
+    });
+}
+
+function updateManizalesMap(data) {
+    initManizalesMap();
+
+    data.zonas.forEach((zona) => {
+        const marker = zonaMarkers[zona.nombre];
+        if (!marker) return;
+
+        const color = intensityToColor(zona.nivel);
+        marker.setStyle({ color, fillColor: color, fillOpacity: 0.42 });
+        marker.setPopupContent(
+            `<h4>${zona.nombre}</h4>
+             <p>Congestion: <strong>${zona.nivel}%</strong></p>
+             <p>Estado: <strong>${intensityToLabel(zona.nivel)}</strong></p>
+             <p>Vehiculos aprox: <strong>${Math.round(data.carros * zona.nivel / 100)}</strong></p>
+             <p>Vel. promedio: <strong>${data.velocidadPromedio} km/h</strong></p>`
+        );
     });
 }
 
@@ -403,7 +427,7 @@ function updateUI(data) {
     updateTrendChart(data);
     updateZones(data.zonas);
     updateIncidents(data);
-    updateHeatmap(data);
+    updateManizalesMap(data);
     buildRecommendation();
 
     const sensorHealth = Math.max(84, Math.min(99, 100 - Math.floor(data.ocupacionVial * 0.16) - data.incidentes));
