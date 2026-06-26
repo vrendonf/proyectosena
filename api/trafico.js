@@ -13,10 +13,10 @@ module.exports = (req, res) => {
     ocupacionVial: intensidad,
     incidentes: Math.floor(Math.random() * 5),
     zonas: [
-      { nombre: "Centro", nivel: Math.floor(Math.random() * 101) },
-      { nombre: "Norte", nivel: Math.floor(Math.random() * 101) },
-      { nombre: "Sur", nivel: Math.floor(Math.random() * 101) },
-      { nombre: "Occidente", nivel: Math.floor(Math.random() * 101) }
+      { nombre: "Centro Historico", nivel: Math.floor(Math.random() * 101) },
+      { nombre: "La Enea",          nivel: Math.floor(Math.random() * 101) },
+      { nombre: "La Sultana",       nivel: Math.floor(Math.random() * 101) },
+      { nombre: "Chipre",           nivel: Math.floor(Math.random() * 101) }
     ]
   };
 

@@ -34,10 +34,10 @@ let manizalesMap = null;
 const zonaMarkers = {};
 
 const ZONAS_GEO = {
-    "Centro":     { lat: 5.0689,  lng: -75.5174, radio: 600 },
-    "Norte":      { lat: 5.0920,  lng: -75.5020, radio: 700 },
-    "Sur":        { lat: 5.0430,  lng: -75.5080, radio: 700 },
-    "Occidente":  { lat: 5.0680,  lng: -75.5420, radio: 650 }
+    "Centro Historico":  { lat: 5.0689,  lng: -75.5174, radio: 600 },
+    "La Enea":           { lat: 5.0920,  lng: -75.5020, radio: 700 },
+    "La Sultana":        { lat: 5.0430,  lng: -75.5080, radio: 700 },
+    "Chipre":            { lat: 5.0680,  lng: -75.5420, radio: 650 }
 };
 
 const chartCanvasEl = document.getElementById("traffic-trend-chart");
@@ -237,10 +237,10 @@ function buildFallbackData() {
         ocupacionVial: ocupacion,
         incidentes,
         zonas: [
-            { nombre: "Centro", nivel: Math.floor(Math.random() * 101) },
-            { nombre: "Norte", nivel: Math.floor(Math.random() * 101) },
-            { nombre: "Sur", nivel: Math.floor(Math.random() * 101) },
-            { nombre: "Occidente", nivel: Math.floor(Math.random() * 101) }
+            { nombre: "Centro Historico", nivel: Math.floor(Math.random() * 101) },
+            { nombre: "La Enea",          nivel: Math.floor(Math.random() * 101) },
+            { nombre: "La Sultana",       nivel: Math.floor(Math.random() * 101) },
+            { nombre: "Chipre",           nivel: Math.floor(Math.random() * 101) }
         ]
     };
 }
