@@ -127,8 +127,8 @@ function intensityToColor(level) {
 }
 
 function intensityToLabel(level) {
-    if (level >= 80) return "Alta congestion";
-    if (level >= 55) return "Congestion moderada";
+    if (level >= 80) return "Alta congestión";
+    if (level >= 55) return "Congestión moderada";
     return "Flujo normal";
 }
 
@@ -200,16 +200,16 @@ function updateAlertFeed(data) {
     const highestZone = data.zonas.reduce((prev, curr) => (curr.nivel > prev.nivel ? curr : prev), data.zonas[0]);
 
     if (highestZone.nivel >= 80) {
-        addCinematicAlert("high", `Congestion critica en ${highestZone.nombre}`, "Se recomienda desvio preventivo y ajuste semaforico inmediato.");
+        addCinematicAlert("high", `Congestión crítica en ${highestZone.nombre}`, "Se recomienda desvío preventivo y ajuste semafórico inmediato.");
         return;
     }
 
     if (highestZone.nivel >= 55 || data.incidentes > 0) {
-        addCinematicAlert("mid", `Flujo tenso en ${highestZone.nombre}`, "Activar monitoreo reforzado y coordinacion de agentes de movilidad.");
+        addCinematicAlert("mid", `Flujo tenso en ${highestZone.nombre}`, "Activar monitoreo reforzado y coordinación de agentes de movilidad.");
         return;
     }
 
-    addCinematicAlert("low", `Operacion estable en ${highestZone.nombre}`, "Demanda controlada. Mantener parametros actuales del sistema.");
+    addCinematicAlert("low", `Operación estable en ${highestZone.nombre}`, "Demanda controlada. Mantener parámetros actuales del sistema.");
 }
 
 function buildFallbackData() {
@@ -256,15 +256,15 @@ function getSignalMetadata(state) {
         return {
             className: "light-green",
             text: "Flujo habilitado",
-            note: "Cruce en operacion normal"
+            note: "Cruce en operación normal"
         };
     }
 
     if (normalized === "AMARILLO") {
         return {
             className: "light-yellow",
-            text: "Transicion preventiva",
-            note: "Ajuste de fase semaforica"
+            text: "Transición preventiva",
+            note: "Ajuste de fase semafórica"
         };
     }
 
@@ -306,8 +306,8 @@ function getSeverityBadge(level) {
 function buildRecommendation() {
     if (trafficHistory.length < 3) {
         forecastTextEl.textContent = "Reuniendo datos para calcular tendencia operativa confiable.";
-        chipLevelEl.textContent = "Nivel: en calibracion";
-        chipProjectionEl.textContent = "Proyeccion: insuficiente";
+        chipLevelEl.textContent = "Nivel: en calibración";
+        chipProjectionEl.textContent = "Proyección: insuficiente";
         return;
     }
 
@@ -318,19 +318,19 @@ function buildRecommendation() {
 
     let level = "Bajo";
     let projection = "estable";
-    let recommendation = "Mantener sincronizacion actual de semaforos y continuar monitoreo.";
+    let recommendation = "Mantener sincronización actual de semáforos y continuar monitoreo.";
 
     if (movingAverage >= 180 || trend > 30) {
         level = "Alto";
         projection = "al alza";
-        recommendation = "Activar onda verde parcial en corredores troncales y priorizar rutas alternas para reducir saturacion.";
+        recommendation = "Activar onda verde parcial en corredores troncales y priorizar rutas alternas para reducir saturación.";
     } else if (movingAverage >= 120 || trend > 10) {
         level = "Medio";
         projection = "moderada";
-        recommendation = "Ajustar tiempos semaforicos en intersecciones criticas y reforzar mensajes de movilidad ciudadana.";
+        recommendation = "Ajustar tiempos semafóricos en intersecciones críticas y reforzar mensajes de movilidad ciudadana.";
     }
 
-    forecastTextEl.textContent = `Pronostico a corto plazo: demanda ${projection} con promedio de ${movingAverage} vehiculos. ${recommendation}`;
+    forecastTextEl.textContent = `Pronóstico a corto plazo: demanda ${projection} con promedio de ${movingAverage} vehículos. ${recommendation}`;
     chipLevelEl.textContent = `Nivel: ${level}`;
     chipProjectionEl.textContent = `Proyeccion: ${projection}`;
 }
@@ -372,7 +372,7 @@ function updateIncidents(data) {
         time: formatHour(data.timestamp),
         zone: highestZone.nombre,
         severity,
-        action: highestZone.nivel >= 75 ? "Desvio y control" : "Monitoreo activo"
+        action: highestZone.nivel >= 75 ? "Desvío y control" : "Monitoreo activo"
     });
 
     if (incidentHistory.length > 6) {
@@ -488,7 +488,7 @@ async function fetchTrafficData() {
 bindScenarioButtons();
 fetchTrafficData();
 setInterval(fetchTrafficData, POLL_INTERVAL_MS);
-// ── Agente IA de trafico ──
+// ── Agente IA de tráfico ──
 let lastTrafficData = null;
 
 const ZONA_ALIASES = {
@@ -532,14 +532,14 @@ function nivelClass(nivel) {
 }
 
 function nivelTexto(nivel) {
-    if (nivel >= 80) return "alta congestion";
-    if (nivel >= 55) return "congestion moderada";
+    if (nivel >= 80) return "alta congestión";
+    if (nivel >= 55) return "congestión moderada";
     return "flujo normal";
 }
 
 function buildAgentResponse(query) {
     if (!lastTrafficData) {
-        return "Aun estoy cargando los datos del sistema. Intenta en unos segundos.";
+        return "Aún estoy cargando los datos del sistema. Intenta en unos segundos.";
     }
 
     const lower = query.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -550,14 +550,14 @@ function buildAgentResponse(query) {
             return `${e} <strong>${z.nombre}</strong>: <span class="${nivelClass(z.nivel)}">${z.nivel}% — ${nivelTexto(z.nivel)}</span>`;
         });
         return `Estado general de Manizales en este momento:<br><br>${lineas.join("<br>")}
-        <br><br>Vehiculos totales detectados: <strong>${lastTrafficData.carros}</strong> | Velocidad promedio: <strong>${lastTrafficData.velocidadPromedio} km/h</strong>`;
+        <br><br>Vehículos totales detectados: <strong>${lastTrafficData.carros}</strong> | Velocidad promedio: <strong>${lastTrafficData.velocidadPromedio} km/h</strong>`;
     }
 
     const zona = detectZone(query);
     if (!zona) {
-        return `No identifique una zona especifica en tu pregunta. Puedes preguntar por:<br>
-        <strong>Centro Historico, La Enea, La Sultana</strong> o <strong>Chipre / Av. Santander</strong>.<br>
-        O usa los botones de acceso rapido.`;
+        return `No identifiqué una zona específica en tu pregunta. Puedes preguntar por:<br>
+        <strong>Centro Histórico, La Enea, La Sultana</strong> o <strong>Chipre / Av. Santander</strong>.<br>
+        O usa los botones de acceso rápido.`;
     }
 
     const datos = lastTrafficData.zonas.find(z => z.nombre === zona);
@@ -571,23 +571,23 @@ function buildAgentResponse(query) {
     const recomendaciones = {
         "Centro Historico": {
             rojo: "Se recomienda evitar la carrera 23 y usar rutas alternas por la avenida Cervantes.",
-            amarillo: "Precaucion en el Parque Caldas y alrededores del mercado.",
-            verde: "Circulacion fluida. Buen momento para transitar por el centro."
+            amarillo: "Precaución en el Parque Caldas y alrededores del mercado.",
+            verde: "Circulación fluida. Buen momento para transitar por el centro."
         },
         "La Enea": {
-            rojo: "Congestion alta en la via al aeropuerto. Considere salir con tiempo adicional.",
-            amarillo: "Trafico moderado hacia La Enea. Vigilar la rotonda de acceso.",
-            verde: "Via despejada hacia el aeropuerto y sector de La Enea."
+            rojo: "Congestión alta en la vía al aeropuerto. Considere salir con tiempo adicional.",
+            amarillo: "Tráfico moderado hacia La Enea. Vigilar la rotonda de acceso.",
+            verde: "Vía despejada hacia el aeropuerto y sector de La Enea."
         },
         "La Sultana": {
-            rojo: "Alta demanda en La Sultana. Se sugiere usar la via alterna de Palogrande.",
-            amarillo: "Flujo tenso en el sector. Atencion en los cruces principales.",
-            verde: "Sin novedad en La Sultana. Trafico en condiciones normales."
+            rojo: "Alta demanda en La Sultana. Se sugiere usar la vía alterna de Palogrande.",
+            amarillo: "Flujo tenso en el sector. Atención en los cruces principales.",
+            verde: "Sin novedad en La Sultana. Tráfico en condiciones normales."
         },
         "Chipre": {
             rojo: "Av. Santander congestionada. Evitar la zona de Chipre en este momento.",
-            amarillo: "Trafico moderado en Av. Santander. Respetar los tiempos semaforicos.",
-            verde: "Av. Santander y Chipre con trafico fluido. Condiciones optimas."
+            amarillo: "Tráfico moderado en Av. Santander. Respetar los tiempos semafóricos.",
+            verde: "Av. Santander y Chipre con tráfico fluido. Condiciones óptimas."
         }
     };
 
@@ -595,8 +595,8 @@ function buildAgentResponse(query) {
     const rec = recomendaciones[zona][nivel];
 
     return `${e} <strong>${zona}</strong><br><br>
-Congestion actual: <span class="${nivelClass(datos.nivel)}"><strong>${datos.nivel}% — ${nivelTexto(datos.nivel)}</strong></span><br>
-Vehiculos estimados: <strong>${veh}</strong><br>
+Congestión actual: <span class="${nivelClass(datos.nivel)}"><strong>${datos.nivel}% — ${nivelTexto(datos.nivel)}</strong></span><br>
+Vehículos estimados: <strong>${veh}</strong><br>
 Velocidad promedio: <strong>${lastTrafficData.velocidadPromedio} km/h</strong><br><br>
 💡 ${rec}`;
 }

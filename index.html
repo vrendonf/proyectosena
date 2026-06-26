@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Trafico Inteligente</title>
+    <title>Sistema de Tráfico Inteligente</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
@@ -20,18 +20,18 @@
         <header class="hero">
             <div>
                 <p class="eyebrow">Smart City Control Center</p>
-                <h1>Sistema de Trafico Inteligente</h1>
-                <p class="subtitle">Monitoreo, analisis y respuesta operativa de movilidad urbana en tiempo real.</p>
+                <h1>Sistema de Tráfico Inteligente</h1>
+                <p class="subtitle">Monitoreo, análisis y respuesta operativa de movilidad urbana en tiempo real.</p>
             </div>
             <div class="hero-meta">
-                <p>Ultima actualizacion</p>
+                <p>Última actualización</p>
                 <strong id="last-update">--:--:--</strong>
             </div>
         </header>
 
         <section class="kpi-grid">
             <article class="kpi-card">
-                <p>Vehiculos en via</p>
+                <p>Vehículos en vía</p>
                 <h2 id="vehicle-count">--</h2>
                 <span>flujo detectado por sensores</span>
             </article>
@@ -41,24 +41,24 @@
                 <span>corredores principales</span>
             </article>
             <article class="kpi-card">
-                <p>Ocupacion vial</p>
+                <p>Ocupación vial</p>
                 <h2><span id="road-occupancy">--</span>%</h2>
                 <span>capacidad usada</span>
             </article>
             <article class="kpi-card status-card">
-                <p>Estado semaforico</p>
+                <p>Estado semafórico</p>
                 <div id="traffic-light" class="signal-pill light-neutral">
                     <span id="traffic-status-text">Cargando...</span>
                 </div>
-                <span id="signal-note">sin diagnostico disponible</span>
+                <span id="signal-note">sin diagnóstico disponible</span>
             </article>
         </section>
 
         <section class="control-grid">
             <article class="panel quick-actions">
                 <div class="panel-head">
-                    <h3>Modo de simulacion</h3>
-                    <p>Cambia el comportamiento para demostracion en vivo</p>
+                    <h3>Modo de simulación</h3>
+                    <p>Cambia el comportamiento para demostración en vivo</p>
                 </div>
                 <div class="action-row">
                     <button class="action-btn" data-scenario="normal">Normal</button>
@@ -87,8 +87,8 @@
         <section class="panel-grid">
             <article class="panel chart-panel">
                 <div class="panel-head">
-                    <h3>Tendencia de demanda (ultimos 12 ciclos)</h3>
-                    <p>Permite visualizar crecimiento o alivio de congestion</p>
+                    <h3>Tendencia de demanda (últimos 12 ciclos)</h3>
+                    <p>Permite visualizar crecimiento o alivio de congestión</p>
                 </div>
                 <div class="chart-wrapper">
                     <canvas id="traffic-trend-chart"></canvas>
@@ -114,7 +114,7 @@
                             <th>Hora</th>
                             <th>Zona</th>
                             <th>Severidad</th>
-                            <th>Accion</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody id="incident-body"></tbody>
@@ -123,13 +123,13 @@
 
             <article class="panel recommendation-panel">
                 <div class="panel-head">
-                    <h3>Analisis predictivo</h3>
-                    <p>Recomendacion automatica del sistema</p>
+                    <h3>Análisis predictivo</h3>
+                    <p>Recomendación automática del sistema</p>
                 </div>
                 <p id="forecast-text" class="forecast-text">Esperando suficientes datos para estimar tendencia...</p>
                 <div class="chips">
                     <span class="chip" id="chip-level">Nivel: --</span>
-                    <span class="chip" id="chip-projection">Proyeccion: --</span>
+                    <span class="chip" id="chip-projection">Proyección: --</span>
                 </div>
             </article>
         </section>
@@ -137,21 +137,21 @@
         <section class="premium-grid">
             <article class="panel city-map-panel">
                 <div class="panel-head">
-                    <h3>Mapa de congestion — Manizales</h3>
+                    <h3>Mapa de congestión — Manizales</h3>
                     <p>Zonas de movilidad urbana en tiempo real. Haz clic en cada zona para ver detalles.</p>
                 </div>
-                <div id="manizales-map" class="manizales-map" aria-label="Mapa interactivo de trafico en Manizales"></div>
+                <div id="manizales-map" class="manizales-map" aria-label="Mapa interactivo de tráfico en Manizales"></div>
             </article>
 
             <article class="panel alert-feed-panel">
                 <div class="panel-head">
                     <h3>Centro de alertas</h3>
-                    <p>Eventos cinematograficos para presentacion ejecutiva</p>
+                    <p>Eventos de movilidad para presentación ejecutiva</p>
                 </div>
                 <div id="alert-feed" class="alert-feed">
                     <article class="alert-card level-low">
                         <h4>Sistema inicializado</h4>
-                        <p>Motor de analitica en espera de eventos de trafico.</p>
+                        <p>Motor de analítica en espera de eventos de tráfico.</p>
                     </article>
                 </div>
             </article>
@@ -160,31 +160,31 @@
         <section class="agent-section">
             <article class="panel agent-panel">
                 <div class="panel-head">
-                    <h3>Agente de trafico IA</h3>
-                    <p>Pregunta por cualquier zona de Manizales y te digo como esta el trafico ahora mismo.</p>
+                    <h3>Agente de tráfico IA</h3>
+                    <p>Pregunta por cualquier zona de Manizales y te digo cómo está el tráfico ahora mismo.</p>
                 </div>
                 <div id="agent-messages" class="agent-messages">
                     <div class="agent-msg bot">
                         <span class="agent-avatar">🤖</span>
-                        <div class="agent-bubble">Hola! Soy el agente de trafico de Manizales. Puedo informarte sobre el estado actual de las vias. ¿Por que zona me preguntas?</div>
+                        <div class="agent-bubble">¡Hola! Soy el agente de tráfico de Manizales. Puedo informarte sobre el estado actual de las vías. ¿Por qué zona me preguntas?</div>
                     </div>
                 </div>
                 <div class="agent-quick-btns">
-                    <button type="button" class="quick-btn" data-query="Centro Historico">Centro Historico</button>
+                    <button type="button" class="quick-btn" data-query="Centro Historico">Centro Histórico</button>
                     <button type="button" class="quick-btn" data-query="La Enea">La Enea / Aeropuerto</button>
                     <button type="button" class="quick-btn" data-query="La Sultana">La Sultana</button>
                     <button type="button" class="quick-btn" data-query="Chipre">Chipre / Av. Santander</button>
                     <button type="button" class="quick-btn" data-query="resumen">Resumen general</button>
                 </div>
                 <div class="agent-input-row">
-                    <input id="agent-input" class="agent-input" type="text" placeholder="Ej: como esta la Avenida Santander?" autocomplete="off" />
+                    <input id="agent-input" class="agent-input" type="text" placeholder="Ej: ¿cómo está la Avenida Santander?" autocomplete="off" />
                     <button type="button" id="agent-send" class="agent-send-btn">Enviar</button>
                 </div>
             </article>
         </section>
 
         <footer class="app-footer">
-            <p>Sistema academico de trafico inteligente para demostracion de Smart Cities.</p>
+            <p>Sistema académico de tráfico inteligente para demostración de Smart Cities.</p>
         </footer>
     </main>
 
