@@ -286,6 +286,12 @@ body {
     min-height: 260px;
 }
 
+.chart-wrapper {
+    position: relative;
+    height: 220px;
+    width: 100%;
+}
+
 .zone-list {
     margin-top: 14px;
     display: grid;
