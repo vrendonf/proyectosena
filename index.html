@@ -157,6 +157,32 @@
             </article>
         </section>
 
+        <section class="agent-section">
+            <article class="panel agent-panel">
+                <div class="panel-head">
+                    <h3>Agente de trafico IA</h3>
+                    <p>Pregunta por cualquier zona de Manizales y te digo como esta el trafico ahora mismo.</p>
+                </div>
+                <div id="agent-messages" class="agent-messages">
+                    <div class="agent-msg bot">
+                        <span class="agent-avatar">🤖</span>
+                        <div class="agent-bubble">Hola! Soy el agente de trafico de Manizales. Puedo informarte sobre el estado actual de las vias. ¿Por que zona me preguntas?</div>
+                    </div>
+                </div>
+                <div class="agent-quick-btns">
+                    <button type="button" class="quick-btn" data-query="Centro Historico">Centro Historico</button>
+                    <button type="button" class="quick-btn" data-query="La Enea">La Enea / Aeropuerto</button>
+                    <button type="button" class="quick-btn" data-query="La Sultana">La Sultana</button>
+                    <button type="button" class="quick-btn" data-query="Chipre">Chipre / Av. Santander</button>
+                    <button type="button" class="quick-btn" data-query="resumen">Resumen general</button>
+                </div>
+                <div class="agent-input-row">
+                    <input id="agent-input" class="agent-input" type="text" placeholder="Ej: como esta la Avenida Santander?" autocomplete="off" />
+                    <button type="button" id="agent-send" class="agent-send-btn">Enviar</button>
+                </div>
+            </article>
+        </section>
+
         <footer class="app-footer">
             <p>Sistema academico de trafico inteligente para demostracion de Smart Cities.</p>
         </footer>

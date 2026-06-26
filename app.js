@@ -408,6 +408,7 @@ function updateTrendChart(data) {
 }
 
 function updateUI(data) {
+    lastTrafficData = data;
     animateNumber("carros", data.carros, (value) => {
         vehicleCountEl.textContent = value;
     });
@@ -487,3 +488,162 @@ async function fetchTrafficData() {
 bindScenarioButtons();
 fetchTrafficData();
 setInterval(fetchTrafficData, POLL_INTERVAL_MS);
+// ── Agente IA de trafico ──
+let lastTrafficData = null;
+
+const ZONA_ALIASES = {
+    "Centro Historico": [
+        "centro", "historico", "parque caldas", "catedral", "ayacucho",
+        "centro historico", "plaza", "mercado"
+    ],
+    "La Enea": [
+        "enea", "aeropuerto", "milan", "milán", "la enea", "norte"
+    ],
+    "La Sultana": [
+        "sultana", "la sultana", "sur", "cable", "fatima", "fátima",
+        "palermo", "palogrande"
+    ],
+    "Chipre": [
+        "chipre", "santander", "avenida santander", "av santander",
+        "av. santander", "occidente", "mirador", "avenida"
+    ]
+};
+
+function detectZone(text) {
+    const lower = text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    for (const [zona, aliases] of Object.entries(ZONA_ALIASES)) {
+        for (const alias of aliases) {
+            if (lower.includes(alias)) return zona;
+        }
+    }
+    return null;
+}
+
+function trafficEmoji(nivel) {
+    if (nivel >= 80) return "🔴";
+    if (nivel >= 55) return "🟡";
+    return "🟢";
+}
+
+function nivelClass(nivel) {
+    if (nivel >= 80) return "nivel-rojo";
+    if (nivel >= 55) return "nivel-amarillo";
+    return "nivel-verde";
+}
+
+function nivelTexto(nivel) {
+    if (nivel >= 80) return "alta congestion";
+    if (nivel >= 55) return "congestion moderada";
+    return "flujo normal";
+}
+
+function buildAgentResponse(query) {
+    if (!lastTrafficData) {
+        return "Aun estoy cargando los datos del sistema. Intenta en unos segundos.";
+    }
+
+    const lower = query.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+    if (lower.includes("resumen") || lower.includes("todo") || lower.includes("general") || lower.includes("ciudad")) {
+        const lineas = lastTrafficData.zonas.map(z => {
+            const e = trafficEmoji(z.nivel);
+            return `${e} <strong>${z.nombre}</strong>: <span class="${nivelClass(z.nivel)}">${z.nivel}% — ${nivelTexto(z.nivel)}</span>`;
+        });
+        return `Estado general de Manizales en este momento:<br><br>${lineas.join("<br>")}
+        <br><br>Vehiculos totales detectados: <strong>${lastTrafficData.carros}</strong> | Velocidad promedio: <strong>${lastTrafficData.velocidadPromedio} km/h</strong>`;
+    }
+
+    const zona = detectZone(query);
+    if (!zona) {
+        return `No identifique una zona especifica en tu pregunta. Puedes preguntar por:<br>
+        <strong>Centro Historico, La Enea, La Sultana</strong> o <strong>Chipre / Av. Santander</strong>.<br>
+        O usa los botones de acceso rapido.`;
+    }
+
+    const datos = lastTrafficData.zonas.find(z => z.nombre === zona);
+    if (!datos) {
+        return `No tengo datos disponibles para ${zona} en este momento.`;
+    }
+
+    const e = trafficEmoji(datos.nivel);
+    const veh = Math.round(lastTrafficData.carros * datos.nivel / 100);
+
+    const recomendaciones = {
+        "Centro Historico": {
+            rojo: "Se recomienda evitar la carrera 23 y usar rutas alternas por la avenida Cervantes.",
+            amarillo: "Precaucion en el Parque Caldas y alrededores del mercado.",
+            verde: "Circulacion fluida. Buen momento para transitar por el centro."
+        },
+        "La Enea": {
+            rojo: "Congestion alta en la via al aeropuerto. Considere salir con tiempo adicional.",
+            amarillo: "Trafico moderado hacia La Enea. Vigilar la rotonda de acceso.",
+            verde: "Via despejada hacia el aeropuerto y sector de La Enea."
+        },
+        "La Sultana": {
+            rojo: "Alta demanda en La Sultana. Se sugiere usar la via alterna de Palogrande.",
+            amarillo: "Flujo tenso en el sector. Atencion en los cruces principales.",
+            verde: "Sin novedad en La Sultana. Trafico en condiciones normales."
+        },
+        "Chipre": {
+            rojo: "Av. Santander congestionada. Evitar la zona de Chipre en este momento.",
+            amarillo: "Trafico moderado en Av. Santander. Respetar los tiempos semaforicos.",
+            verde: "Av. Santander y Chipre con trafico fluido. Condiciones optimas."
+        }
+    };
+
+    const nivel = datos.nivel >= 80 ? "rojo" : datos.nivel >= 55 ? "amarillo" : "verde";
+    const rec = recomendaciones[zona][nivel];
+
+    return `${e} <strong>${zona}</strong><br><br>
+Congestion actual: <span class="${nivelClass(datos.nivel)}"><strong>${datos.nivel}% — ${nivelTexto(datos.nivel)}</strong></span><br>
+Vehiculos estimados: <strong>${veh}</strong><br>
+Velocidad promedio: <strong>${lastTrafficData.velocidadPromedio} km/h</strong><br><br>
+💡 ${rec}`;
+}
+
+function appendAgentMessage(html, role) {
+    const messagesEl = document.getElementById("agent-messages");
+    if (!messagesEl) return;
+    const msg = document.createElement("div");
+    msg.className = `agent-msg ${role}`;
+    const avatar = role === "bot" ? "🤖" : "👤";
+    msg.innerHTML = `<span class="agent-avatar">${avatar}</span><div class="agent-bubble">${html}</div>`;
+    messagesEl.appendChild(msg);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function handleAgentQuery(query) {
+    if (!query.trim()) return;
+    appendAgentMessage(query, "user");
+    setTimeout(() => {
+        appendAgentMessage(buildAgentResponse(query), "bot");
+    }, 380);
+}
+
+function initAgent() {
+    const inputEl = document.getElementById("agent-input");
+    const sendBtn = document.getElementById("agent-send");
+    const quickBtns = document.querySelectorAll(".quick-btn");
+
+    if (!inputEl || !sendBtn) return;
+
+    sendBtn.addEventListener("click", () => {
+        handleAgentQuery(inputEl.value);
+        inputEl.value = "";
+    });
+
+    inputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            handleAgentQuery(inputEl.value);
+            inputEl.value = "";
+        }
+    });
+
+    quickBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            handleAgentQuery(btn.dataset.query);
+        });
+    });
+}
+
+initAgent();
